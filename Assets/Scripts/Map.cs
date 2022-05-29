@@ -44,4 +44,6 @@ public class Map : MonoBehaviour
         map[y, x].isThereBlock = true;
     }
 
+    //
+
 }

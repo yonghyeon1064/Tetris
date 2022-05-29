@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
 
     //변수
     bool gameActive = true;
+    string[] minoList;
+    int minoNum = 7;
+    int currentMinoNum = 0;
     IEnumerator descent;
 
     // Start is called before the first frame update
@@ -22,11 +25,12 @@ public class GameManager : MonoBehaviour
         mapS = map.GetComponent<Map>();
 
         startPos = new Vector3(4.5f, 1.5f, 0);
+        minoList = new string[] { "I", "J", "L", "Z", "S", "T", "O"};
     }
 
     private void Start() {
         minoS.SetPosition(startPos);
-        minoS.MakeMino("Z");
+        minoS.MakeMino(NextMino());
 
         descent = MinoDownCycle();
         StartCoroutine(descent);
@@ -36,6 +40,25 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         GetInput();
+    }
+
+    string NextMino() {
+        if(currentMinoNum >= 7) {
+            currentMinoNum = 0;
+            SwapMinoArrRandom();
+        }
+        return minoList[currentMinoNum++];
+    }
+
+    void SwapMinoArrRandom() {
+        string temp;
+        int random;
+        for(int i=0; i<minoNum-1; i++) {
+            random = Random.Range(i, 7);
+            temp = minoList[random];
+            minoList[random] = minoList[i];
+            minoList[i] = temp;
+        }
     }
 
     //미노가 시간마다 하강하게 하는 코루틴
@@ -49,7 +72,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log(minoS.worldPosArr[0]);
                 FixBlockToMap();
                 minoS.SetPosition(startPos);
-                minoS.MakeMino("Z");
+                minoS.MakeMino(NextMino());
             }
         }
     }
