@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
         GetInput();
     }
 
+    //다음 미노 반환
     string NextMino() {
         if(currentMinoNum >= 7) {
             currentMinoNum = 0;
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
         return minoList[currentMinoNum++];
     }
 
+    //미노 목록 랜덤 스왑
     void SwapMinoArrRandom() {
         string temp;
         int random;
@@ -64,15 +66,14 @@ public class GameManager : MonoBehaviour
     //미노가 시간마다 하강하게 하는 코루틴
     IEnumerator MinoDownCycle() {
         while (gameActive) {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             if(CheckMovePossible("d", false))
                 minoS.moveMino("d");
             else {
-                Debug.Log("Can't down");
-                Debug.Log(minoS.worldPosArr[0]);
                 FixBlockToMap();
                 minoS.SetPosition(startPos);
                 minoS.MakeMino(NextMino());
+                mapS.CheckLineClear();
             }
         }
     }

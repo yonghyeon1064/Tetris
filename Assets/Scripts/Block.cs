@@ -42,7 +42,6 @@ public class Block : MonoBehaviour
 
     //회전했을 때의 상대좌표를 월드좌표로 바꿔 반환 (Mino가 호출)
     public Vector3 ReturnRotateWorldPos(string dir, Vector3 center) {
-        float x, y;
         if(dir == "r")
             return new Vector3(center.x + relationalY, center.y + relationalX * -1f);
         else if(dir == "l")
