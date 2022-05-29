@@ -9,6 +9,7 @@ public class Mino : MonoBehaviour
     GameObject[] blockArr;
     Block[] bScArr;
     public Vector3[] worldPosArr;
+    public Vector3[] rotateWorldPosArr;
 
     //변수
     enum MinoType {
@@ -22,20 +23,22 @@ public class Mino : MonoBehaviour
     }
     MinoType currentMinoType;
 
+    //한 미노에 있는 Block의 수
     public int blockNum = 4;
 
     public void Awake() {
         blockArr = new GameObject[4];
         bScArr = new Block[4];
         worldPosArr = new Vector3[4];
+        rotateWorldPosArr = new Vector3[4];
     }
 
-    //GameManager가 호출
+    //Mino의 위치 설정 (GameManager가 호출)
     public void SetPosition(Vector3 position) {
         transform.position = position;
     }
 
-    //GameManager가 호출
+    //새 Block을 만들어 새 Mino를 제작 (GameManager가 호출)
     public void MakeMino(string name) {
         for(int i=0; i < blockNum; i++)
             blockArr[i] = Instantiate(block, transform.position, Quaternion.identity);
@@ -97,25 +100,21 @@ public class Mino : MonoBehaviour
         ResetPosAll();
     }
 
-    //GameManager가 호출
+    //Mino의 위치를 이동, Block들도 따라옴 (GameManager가 호출)
     public void moveMino(string dir) {
-        if(dir == "r") {
+        if(dir == "r")
             transform.position = new Vector3(transform.position.x + 1f, transform.position.y, 0);
-        }
-        else if(dir == "l") {
+        else if(dir == "l")
             transform.position = new Vector3(transform.position.x - 1f, transform.position.y, 0);
-        }
-        else if(dir == "u") {
+        else if(dir == "u")
             transform.position = new Vector3(transform.position.x, transform.position.y + 1f, 0);
-        }
-        else if(dir == "d") {
+        else if(dir == "d")
             transform.position = new Vector3(transform.position.x, transform.position.y - 1f, 0);
-        }
         GetWorldPos();
         ResetPosAll();
     }
 
-    //GameManager가 호출
+    //Block들을 회전시킴 (GameManager가 호출)
     public void rotateMino(string dir) {
         if (currentMinoType == MinoType.OMino)
             return;
@@ -132,11 +131,19 @@ public class Mino : MonoBehaviour
         ResetPosAll();
     }
 
+    //회전했을때의 Block들의 월드 좌표를 받아옴 (GameManager가 호출)
+    public void GetRotateWorldPos(string dir) {
+        for (int i = 0; i < blockNum; i++)
+            rotateWorldPosArr[i] = bScArr[i].ReturnRotateWorldPos(dir, transform.position);
+    }
+
+    //현재 Block들의 월드 좌표를 받아옴
     void GetWorldPos() {
         for(int i=0; i < blockNum; i++)
             worldPosArr[i] = bScArr[i].ReturnWorldPos(transform.position);
     }
 
+    //현재 Block들을 자신의 상대좌표로 이동시킴
     void ResetPosAll() {
         for(int i=0; i<blockNum; i++)
             bScArr[i].ResetPos(transform.position);

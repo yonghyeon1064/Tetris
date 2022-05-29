@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     IEnumerator MinoDownCycle() {
         while (gameActive) {
             yield return new WaitForSeconds(2f);
-            if(CheckMovePossible("d"))
+            if(CheckMovePossible("d", false))
                 minoS.moveMino("d");
             else {
                 Debug.Log("Can't down");
@@ -50,20 +50,22 @@ public class GameManager : MonoBehaviour
     }
 
     //미노가 움직이는 것이 가능한가
-    bool CheckMovePossible(string dir) {
+    bool CheckMovePossible(string dir, bool isRotate) {
         bool result = true;
         for(int i=0; i<minoS.blockNum && result; i++) {
             //체크해야할 좌표를 인수로 입력
-            if(dir == "r")
-                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x + 1f, -1 * minoS.worldPosArr[i].y);
-            else if (dir == "l")
-                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x - 1f, -1 * minoS.worldPosArr[i].y);
-            else if (dir == "d")
-                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x, -1 * (minoS.worldPosArr[i].y - 1f));
-            else if (dir == "rr")
-                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x, -1 * minoS.worldPosArr[i].y);
-            else if (dir == "lr")
-                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x, -1 * minoS.worldPosArr[i].y);
+            if (!isRotate) {
+                if (dir == "r")
+                    result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x + 1f, -1 * minoS.worldPosArr[i].y);
+                else if (dir == "l")
+                    result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x - 1f, -1 * minoS.worldPosArr[i].y);
+                else if (dir == "d")
+                    result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x, -1 * (minoS.worldPosArr[i].y - 1f));
+            }
+            else {
+                minoS.GetRotateWorldPos(dir);
+                result = result && mapS.CanBlockMove(minoS.rotateWorldPosArr[i].x, -1 * minoS.rotateWorldPosArr[i].y);
+            }
         }
         return result;
     }
@@ -72,12 +74,12 @@ public class GameManager : MonoBehaviour
         if (gameActive) {
             if (Input.GetKeyDown(KeyCode.D)) {
                 //오른쪽
-                if (CheckMovePossible("r"))
+                if (CheckMovePossible("r", false))
                     minoS.moveMino("r");
             }
             else if (Input.GetKeyDown(KeyCode.A)) {
                 //왼쪽
-                if (CheckMovePossible("l"))
+                if (CheckMovePossible("l", false))
                     minoS.moveMino("l");
             }
             else if (Input.GetKeyDown(KeyCode.S)) {
@@ -93,11 +95,13 @@ public class GameManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.N)) {
                 //왼쪽 회전
-                minoS.rotateMino("l");
+                if(CheckMovePossible("l", true))
+                    minoS.rotateMino("l");
             }
             if (Input.GetKeyDown(KeyCode.M)) {
                 //오른쪽 회전
-                minoS.rotateMino("r");
+                if (CheckMovePossible("r", true))
+                    minoS.rotateMino("r");
             }
         }
     }
