@@ -8,14 +8,14 @@ public class Map : MonoBehaviour
 
     //변수
     int height = 20, width = 10;
-    int[,] map;
+    Tile[,] map;
 
     // Start is called before the first frame update
     void Start()
     {
-        map = new int[height, width];
+        map = new Tile[height, width];
         SetMap();
-        PrintMap();
+        //PrintMap();
     }
 
     // Update is called once per frame
@@ -27,14 +27,14 @@ public class Map : MonoBehaviour
     void SetMap() {
         for(int i=0; i<height; i++) {
             for (int j = 0; j < width; j++)
-                map[i,j] = 0;
+                map[i, j] = new Tile();
         }
     }
 
     void PrintMap() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++)
-                Debug.Log(map[i, j]);
+                Debug.Log(map[i, j].isThereBlock);
         }
     }
 }
