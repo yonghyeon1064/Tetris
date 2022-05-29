@@ -41,19 +41,44 @@ public class GameManager : MonoBehaviour
     IEnumerator MinoDownCycle() {
         while (gameActive) {
             yield return new WaitForSeconds(2f);
-            minoS.moveMino("d");
+            if(CheckMovePossible("d"))
+                minoS.moveMino("d");
+            else {
+                Debug.Log("Can't down");
+            }
         }
+    }
+
+    //미노가 움직이는 것이 가능한가
+    bool CheckMovePossible(string dir) {
+        bool result = true;
+        for(int i=0; i<minoS.blockNum && result; i++) {
+            //체크해야할 좌표를 인수로 입력
+            if(dir == "r")
+                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x + 1f, -1 * minoS.worldPosArr[i].y);
+            else if (dir == "l")
+                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x - 1f, -1 * minoS.worldPosArr[i].y);
+            else if (dir == "d")
+                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x, -1 * (minoS.worldPosArr[i].y - 1f));
+            else if (dir == "rr")
+                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x, -1 * minoS.worldPosArr[i].y);
+            else if (dir == "lr")
+                result = result && mapS.CanBlockMove(minoS.worldPosArr[i].x, -1 * minoS.worldPosArr[i].y);
+        }
+        return result;
     }
 
     void GetInput() {
         if (gameActive) {
             if (Input.GetKeyDown(KeyCode.D)) {
                 //오른쪽
-                minoS.moveMino("r");
+                if (CheckMovePossible("r"))
+                    minoS.moveMino("r");
             }
             else if (Input.GetKeyDown(KeyCode.A)) {
                 //왼쪽
-                minoS.moveMino("l");
+                if (CheckMovePossible("l"))
+                    minoS.moveMino("l");
             }
             else if (Input.GetKeyDown(KeyCode.S)) {
                 //아래쪽

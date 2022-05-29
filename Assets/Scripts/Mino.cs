@@ -22,7 +22,7 @@ public class Mino : MonoBehaviour
     }
     MinoType currentMinoType;
 
-    int blockNum = 4;
+    public int blockNum = 4;
 
     public void Awake() {
         blockArr = new GameObject[4];
