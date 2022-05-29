@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
         GetInput();
     }
 
+    //미노가 시간마다 하강하게 하는 코루틴
     IEnumerator MinoDownCycle() {
         while (gameActive) {
             yield return new WaitForSeconds(2f);
@@ -45,11 +46,15 @@ public class GameManager : MonoBehaviour
                 minoS.moveMino("d");
             else {
                 Debug.Log("Can't down");
+                Debug.Log(minoS.worldPosArr[0]);
+                FixBlockToMap();
+                minoS.SetPosition(startPos);
+                minoS.MakeMino("Z");
             }
         }
     }
 
-    //미노가 움직이는 것이 가능한가
+    //미노가 움직이는 것이 가능한가 체크
     bool CheckMovePossible(string dir, bool isRotate) {
         bool result = true;
         for(int i=0; i<minoS.blockNum && result; i++) {
@@ -69,7 +74,14 @@ public class GameManager : MonoBehaviour
         }
         return result;
     }
+    
+    //Block 맵에 고정
+    void FixBlockToMap() {
+        for(int i=0; i<minoS.blockNum; i++)
+            mapS.FillTile(minoS.worldPosArr[i].x, -1 * minoS.worldPosArr[i].y, minoS.blockArr[i]);
+    }
 
+    //플레이어 입력 처리
     void GetInput() {
         if (gameActive) {
             if (Input.GetKeyDown(KeyCode.D)) {

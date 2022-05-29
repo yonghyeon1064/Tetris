@@ -24,7 +24,7 @@ public class Map : MonoBehaviour
         }
     }
 
-    //GameManager가 호출
+    //Argument 위치가 비어있는지 반환 (GameManager가 호출)
     public bool CanBlockMove(float _x, float _y) {
         int x = (int)_x;
         int y = (int)_y;
@@ -35,4 +35,13 @@ public class Map : MonoBehaviour
         else
             return !map[y, x].isThereBlock;
     }
+
+    //Argument 위치를 채움 (GameManager가 호출)
+    public void FillTile(float _x, float _y, GameObject block) {
+        int x = (int)_x;
+        int y = (int)_y;
+        map[y, x].block = block;
+        map[y, x].isThereBlock = true;
+    }
+
 }

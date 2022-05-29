@@ -6,7 +6,7 @@ public class Mino : MonoBehaviour
 {
     //참조변수
     public GameObject block;
-    GameObject[] blockArr;
+    public GameObject[] blockArr;
     Block[] bScArr;
     public Vector3[] worldPosArr;
     public Vector3[] rotateWorldPosArr;
