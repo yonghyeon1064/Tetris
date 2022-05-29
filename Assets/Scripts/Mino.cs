@@ -10,6 +10,7 @@ public class Mino : MonoBehaviour
     Block[] bScArr;
     public Vector3[] worldPosArr;
     public Vector3[] rotateWorldPosArr;
+    Color blockColor;
 
     //변수
     enum MinoType {
@@ -52,6 +53,7 @@ public class Mino : MonoBehaviour
                 bScArr[1].SetRelation(-0.5f, 0.5f);
                 bScArr[2].SetRelation(0.5f, 0.5f);
                 bScArr[3].SetRelation(1.5f, 0.5f);
+                blockColor = Color.red;
                 break;
             case "J":
                 currentMinoType = MinoType.JMino;
@@ -59,6 +61,7 @@ public class Mino : MonoBehaviour
                 bScArr[1].SetRelation(0.5f, -0.5f);
                 bScArr[2].SetRelation(0.5f, 0.5f);
                 bScArr[3].SetRelation(0.5f, 1.5f);
+                blockColor = Color.blue;
                 break;
             case "L":
                 currentMinoType = MinoType.LMino;
@@ -66,6 +69,7 @@ public class Mino : MonoBehaviour
                 bScArr[1].SetRelation(-0.5f, 0.5f);
                 bScArr[2].SetRelation(-0.5f, 1.5f);
                 bScArr[3].SetRelation(0.5f, -0.5f);
+                blockColor = Color.yellow;
                 break;
             case "Z":
                 currentMinoType = MinoType.ZMino;
@@ -73,6 +77,7 @@ public class Mino : MonoBehaviour
                 bScArr[1].SetRelation(-0.5f, 0.5f);
                 bScArr[2].SetRelation(0.5f, 0.5f);
                 bScArr[3].SetRelation(0.5f, 1.5f);
+                blockColor = Color.white;
                 break;
             case "S":
                 currentMinoType = MinoType.SMino;
@@ -80,6 +85,7 @@ public class Mino : MonoBehaviour
                 bScArr[1].SetRelation(-0.5f, 1.5f);
                 bScArr[2].SetRelation(0.5f, -0.5f);
                 bScArr[3].SetRelation(0.5f, 0.5f);
+                blockColor = Color.green;
                 break;
             case "T":
                 currentMinoType = MinoType.TMino;
@@ -87,6 +93,7 @@ public class Mino : MonoBehaviour
                 bScArr[1].SetRelation(-0.5f, -0.5f);
                 bScArr[2].SetRelation(-0.5f, 0.5f);
                 bScArr[3].SetRelation(0.5f, -0.5f);
+                blockColor = Color.cyan;
                 break;
             case "O":
                 currentMinoType = MinoType.OMino;
@@ -94,8 +101,11 @@ public class Mino : MonoBehaviour
                 bScArr[1].SetRelation(-0.5f, 0.5f);
                 bScArr[2].SetRelation(0.5f, -0.5f);
                 bScArr[3].SetRelation(0.5f, 0.5f);
+                blockColor = Color.black;
                 break;
         }
+        for (int i = 0; i < blockNum; i++)
+            blockArr[i].GetComponent<Renderer>().material.color = blockColor;
         GetWorldPos();
         ResetPosAll();
     }

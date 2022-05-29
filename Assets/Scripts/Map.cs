@@ -5,6 +5,8 @@ using UnityEngine;
 public class Map : MonoBehaviour
 {
     //참조변수
+    GameObject gm;
+    GameManager gMS;
 
     //변수
     int height = 20, width = 10;
@@ -13,6 +15,8 @@ public class Map : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gm = GameObject.Find("GameManager");
+        gMS = gm.GetComponent<GameManager>();
         map = new Tile[height, width];
         SetMap();
     }
@@ -40,6 +44,10 @@ public class Map : MonoBehaviour
     public void FillTile(float _x, float _y, GameObject block) {
         int x = (int)_x;
         int y = (int)_y;
+        if (y < 0) {
+            gMS.GameOver();
+            return;
+        }
         map[y, x].block = block;
         map[y, x].isThereBlock = true;
     }

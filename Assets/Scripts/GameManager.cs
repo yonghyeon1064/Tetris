@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     //참조변수
     public GameObject mino;
     public GameObject map;
+    public GameObject restartButton;
     Mino minoS;
     Map mapS;
     Vector3 startPos;
@@ -23,15 +25,17 @@ public class GameManager : MonoBehaviour
     {
         minoS = mino.GetComponent<Mino>();
         mapS = map.GetComponent<Map>();
+        restartButton.SetActive(false);
 
         startPos = new Vector3(4.5f, 1.5f, 0);
         minoList = new string[] { "I", "J", "L", "Z", "S", "T", "O"};
+        SwapMinoArrRandom();
     }
 
     private void Start() {
         minoS.SetPosition(startPos);
         minoS.MakeMino(NextMino());
-
+        
         descent = MinoDownCycle();
         StartCoroutine(descent);
     }
@@ -40,6 +44,19 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         GetInput();
+    }
+
+    public void StartGame() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void GameOver() {
+        restartButton.SetActive(true);
+        gameActive = false;
+    }
+
+    public void EndGame() {
+        Application.Quit();
     }
 
     //다음 미노 반환
@@ -71,9 +88,12 @@ public class GameManager : MonoBehaviour
                 minoS.moveMino("d");
             else {
                 FixBlockToMap();
-                minoS.SetPosition(startPos);
-                minoS.MakeMino(NextMino());
-                mapS.CheckLineClear();
+                yield return new WaitForSeconds(0.1f);
+                if (gameActive) {
+                    minoS.SetPosition(startPos);
+                    minoS.MakeMino(NextMino());
+                    mapS.CheckLineClear(); // 얘 이용해서 점수 계산 가능
+                }
             }
         }
     }
